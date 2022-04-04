@@ -38,9 +38,9 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
           backgroundColor: Theme.of(context).primaryColor,
           automaticallyImplyLeading: false),
       body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
