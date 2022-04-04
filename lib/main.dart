@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.purple,
         primarySwatch: Colors.purple,
         unselectedWidgetColor: Colors.purple,
-
       ),
     );
   }
 }
-

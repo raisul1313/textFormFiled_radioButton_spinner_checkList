@@ -40,13 +40,9 @@ class ShowInformationPage extends StatelessWidget {
                       "Name : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      name,
-                      style: TextStyle(fontSize: 20.0),
-                    ),
+                    Text(name),
                   ],
                 ),
                 Row(
@@ -55,12 +51,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Email : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       email,
-                      style: TextStyle(fontSize: 20.0),
                     ),
                   ],
                 ),
@@ -70,12 +64,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Phone : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       phone.toString(),
-                      style: TextStyle(fontSize: 20.0),
                     ),
                   ],
                 ),
@@ -85,12 +77,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Age : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       age.toString(),
-                      style: TextStyle(fontSize: 20.0),
                     ),
                   ],
                 ),
@@ -100,13 +90,9 @@ class ShowInformationPage extends StatelessWidget {
                       "Height (feet-inch) : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      height.toString(),
-                      style: TextStyle(fontSize: 20.0),
-                    ),
+                    Text(height.toString()),
                   ],
                 ),
                 Row(
@@ -115,12 +101,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Gender : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       gender.toString(),
-                      style: TextStyle(fontSize: 20.0),
                     ),
                   ],
                 ),
