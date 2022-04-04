@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:owner_information/view/show_infomation_page.dart';
 
 class InputInformationFiled extends StatefulWidget {
   const InputInformationFiled({Key? key}) : super(key: key);
@@ -10,14 +11,19 @@ class InputInformationFiled extends StatefulWidget {
 
 class _InputInformationFiledState extends State<InputInformationFiled> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var _groupValue = 1;
-  bool _isValid = false;
-  bool _isChecked = false;
+  late int _radioGroupValue;
+  bool _isCheckButtonChecked = false;
 
-  void _saveForm() {
-    setState(() {
-      _isValid = _formKey.currentState!.validate();
-    });
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _heightController = TextEditingController();
+
+  @override
+  void initState() {
+    _radioGroupValue = 1;
+    super.initState();
   }
 
   @override
@@ -25,12 +31,12 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Owner Information",
-        ),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
+          title: Text(
+            "Owner Information",
+          ),
+          centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor,
+          automaticallyImplyLeading: false),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -64,10 +70,11 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                 borderSide: BorderSide(
                                     color: Theme.of(context).primaryColor),
                               ),
-                              hintText: "Enter Your Name",
+                              hintText: "Enter your name",
                               labelText: "Name",
                               prefixIcon: Icon(Icons.person),
                             ),
+                            controller: _nameController,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'This field is required';
@@ -79,6 +86,10 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               return null;
                             },
                             textInputAction: TextInputAction.next,
+                            inputFormatters: [
+                              //FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(50),
+                            ],
                           ),
                           SizedBox(
                             height: 30.0,
@@ -94,6 +105,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               labelText: "Email Address",
                               prefixIcon: Icon(Icons.email_outlined),
                             ),
+                            controller: _emailController,
                             validator: (String? value) {
                               if (value!.isEmpty) {
                                 return 'This field is required';
@@ -126,6 +138,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(11),
                             ],
+                            controller: _phoneController,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'This field is required';
@@ -156,6 +169,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                     labelText: "Age",
                                     prefixIcon: Icon(Icons.accessibility_new),
                                   ),
+                                  controller: _ageController,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return 'This field is required';
@@ -189,6 +203,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                     labelText: "Height (feet-inch)",
                                     prefixIcon: Icon(Icons.height),
                                   ),
+                                  controller: _heightController,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return 'This field is required';
@@ -219,40 +234,50 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Radio(
-                                  value: 1,
-                                  groupValue: _groupValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _groupValue = 1;
-                                    });
-                                  }),
-                              Text("Male"),
-                              Radio(
-                                  value: 2,
-                                  groupValue: _groupValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _groupValue = 2;
-                                    });
-                                  }),
-                              Text("Female"),
-                              Radio(
-                                  value: 3,
-                                  groupValue: _groupValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _groupValue = 3;
-                                    });
-                                  }),
-                              Text("Other"),
+                              Row(
+                                children: [
+                                  Radio(
+                                      value: 1,
+                                      groupValue: _radioGroupValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _radioGroupValue = 1;
+                                        });
+                                      }),
+                                  Text("Male"),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(
+                                      value: 2,
+                                      groupValue: _radioGroupValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _radioGroupValue = 2;
+                                        });
+                                      }),
+                                  Text("Female"),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(
+                                      value: 3,
+                                      groupValue: _radioGroupValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _radioGroupValue = 3;
+                                        });
+                                      }),
+                                  Text("Other"),
+                                ],
+                              ),
                             ],
                           ),
                           SizedBox(
                             height: 10.0,
                           ),
-
-
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -269,10 +294,10 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   Row(
                                     children: [
                                       Checkbox(
-                                          value: _isChecked,
-                                          onChanged: (bool? value) {
+                                          value: _isCheckButtonChecked,
+                                          onChanged: (bool? newValue) {
                                             setState(() {
-                                              _isChecked = value!;
+                                              _isCheckButtonChecked = newValue!;
                                             });
                                           }),
                                       Text("Bike"),
@@ -281,10 +306,10 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   Row(
                                     children: [
                                       Checkbox(
-                                          value: _isChecked,
-                                          onChanged: (bool? value) {
+                                          value: _isCheckButtonChecked,
+                                          onChanged: (bool? newValue) {
                                             setState(() {
-                                              _isChecked = value!;
+                                              _isCheckButtonChecked = newValue!;
                                             });
                                           }),
                                       Text("Car"),
@@ -293,10 +318,11 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   Row(
                                     children: [
                                       Checkbox(
-                                          value: _isChecked,
-                                          onChanged: (bool? value) {
+                                          value: _isCheckButtonChecked,
+                                          onChanged: (bool? newValue) {
                                             setState(() {
-                                              _isChecked = value!;
+                                              _isCheckButtonChecked = newValue!;
+                                              print(_isCheckButtonChecked);
                                             });
                                           }),
                                       Text("Truck"),
@@ -306,15 +332,24 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               ),
                             ],
                           ),
-
-
-
-
-
-
                           ElevatedButton(
                               onPressed: () {
-                                if (_formKey.currentState!.validate()) {}
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ShowInformationPage(
+                                        email: _emailController.text,
+                                        height: double.parse(
+                                            _heightController.text),
+                                        name: _nameController.text,
+                                        phone: int.parse(_phoneController.text),
+                                        age: int.parse(_ageController.text),
+                                        gender: _radioGroupValue,
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                               child: Text("Submit"))
                         ],

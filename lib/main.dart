@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.purple,
         primarySwatch: Colors.purple,
+        unselectedWidgetColor: Colors.purple,
 
       ),
     );
