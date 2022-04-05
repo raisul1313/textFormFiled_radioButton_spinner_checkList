@@ -29,7 +29,8 @@ class ShowInformationPage extends StatelessWidget {
           ),
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
-          automaticallyImplyLeading: false),
+          //automaticallyImplyLeading: false
+      ),
       body: SafeArea(
         child: Container(
           height: size.height,
