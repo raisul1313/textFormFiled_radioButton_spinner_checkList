@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:owner_information/view/show_infomation_page.dart';
 
-class InputInformationFiled extends StatefulWidget {
-  const InputInformationFiled({Key? key}) : super(key: key);
+class InputInformationPage extends StatefulWidget {
+  const InputInformationPage({Key? key}) : super(key: key);
 
   @override
-  State<InputInformationFiled> createState() => _InputInformationFiledState();
+  State<InputInformationPage> createState() => _InputInformationPageState();
 }
 
-class _InputInformationFiledState extends State<InputInformationFiled> {
+class _InputInformationPageState extends State<InputInformationPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late int _radioGroupValue;
-  bool _isCheckButtonChecked = false;
+  late String _selectedGender;
+  late List <String> _selectOwnerType;
+
+  late bool _bikeVal, _carVal, _truckVal, _houseVal;
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -23,6 +26,12 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
   @override
   void initState() {
     _radioGroupValue = 1;
+    _selectedGender = "Male";
+    _bikeVal = false;
+    _carVal = false;
+    _truckVal = false;
+    _houseVal = false;
+    _selectOwnerType = [];
     super.initState();
   }
 
@@ -234,6 +243,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   onChanged: (value) {
                                     setState(() {
                                       _radioGroupValue = 1;
+                                      _selectedGender = "Male";
                                     });
                                   }),
                               Text("Male"),
@@ -247,6 +257,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   onChanged: (value) {
                                     setState(() {
                                       _radioGroupValue = 2;
+                                      _selectedGender = "Female";
                                     });
                                   }),
                               Text("Female"),
@@ -260,6 +271,7 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                   onChanged: (value) {
                                     setState(() {
                                       _radioGroupValue = 3;
+                                      _selectedGender = "Other";
                                     });
                                   }),
                               Text("Other"),
@@ -286,22 +298,31 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               Row(
                                 children: [
                                   Checkbox(
-                                      value: _isCheckButtonChecked,
-                                      onChanged: (bool? newValue) {
-                                        setState(() {
-                                          _isCheckButtonChecked = newValue!;
-                                        });
-                                      }),
+                                    value: _bikeVal,
+                                    onChanged: (bool? newValue) {
+                                      setState(() {
+                                        if (_bikeVal = newValue!) {
+                                          _selectOwnerType.add("Bike");
+                                        } else {
+                                          _selectOwnerType.remove("Bike");
+                                        }
+                                      });
+                                    },
+                                  ),
                                   Text("Bike"),
                                 ],
                               ),
                               Row(
                                 children: [
                                   Checkbox(
-                                      value: _isCheckButtonChecked,
+                                      value: _carVal,
                                       onChanged: (bool? newValue) {
                                         setState(() {
-                                          _isCheckButtonChecked = newValue!;
+                                          if (_carVal = newValue!) {
+                                            _selectOwnerType.add("Car");
+                                          } else {
+                                            _selectOwnerType.remove("Car");
+                                          }
                                         });
                                       }),
                                   Text("Car"),
@@ -310,14 +331,33 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                               Row(
                                 children: [
                                   Checkbox(
-                                      value: _isCheckButtonChecked,
+                                      value: _truckVal,
                                       onChanged: (bool? newValue) {
                                         setState(() {
-                                          _isCheckButtonChecked = newValue!;
-                                          print(_isCheckButtonChecked);
+                                          if (_truckVal = newValue!) {
+                                            _selectOwnerType.add("Truck");
+                                          } else {
+                                            _selectOwnerType.remove("Truck");
+                                          }
                                         });
                                       }),
                                   Text("Truck"),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      value: _houseVal,
+                                      onChanged: (bool? newValue) {
+                                        setState(() {
+                                          if (_houseVal = newValue!) {
+                                            _selectOwnerType.add("House");
+                                          } else {
+                                            _selectOwnerType.remove("House");
+                                          }
+                                        });
+                                      }),
+                                  Text("House"),
                                 ],
                               ),
                             ],
@@ -340,7 +380,8 @@ class _InputInformationFiledState extends State<InputInformationFiled> {
                                     name: _nameController.text,
                                     phone: int.parse(_phoneController.text),
                                     age: int.parse(_ageController.text),
-                                    gender: _radioGroupValue,
+                                    genderText: _selectedGender,
+                                    ownerTypeText: _selectOwnerType,
                                   ),
                                 ),
                               );

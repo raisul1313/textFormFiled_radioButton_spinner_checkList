@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Owner Information',
-      home: InputInformationFiled(),
+      home: InputInformationPage(),
       theme: ThemeData(
         primaryColor: Colors.purple,
         primarySwatch: Colors.purple,
