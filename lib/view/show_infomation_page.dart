@@ -1,35 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:owner_information/owner.dart';
 import 'package:owner_information/view/input_information_page.dart';
 
 class ShowInformationPage extends StatelessWidget {
-  final String name, email, genderText;
-  final List<String> ownerTypeText;
-
-  final int phone, age;
-  final double height;
-
-  const ShowInformationPage(
-      {Key? key,
-      required this.name,
-      required this.email,
-      required this.phone,
-      required this.age,
-      required this.height,
-      required this.genderText,
-      required this.ownerTypeText})
-      : super(key: key);
+   final Owner owner;
+  const ShowInformationPage({Key? key, required this.owner}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            "Owner's Information",
-          ),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).primaryColor,
-          //automaticallyImplyLeading: false
+        title: Text(
+          "Owner's Information",
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        //automaticallyImplyLeading: false
       ),
       body: SafeArea(
         child: Container(
@@ -46,14 +33,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Name : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.name??"",    // (?? " ") if the data is empty
                     ),
                   ],
                 ),
@@ -63,14 +46,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Email : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.email??"",
                     ),
                   ],
                 ),
@@ -80,14 +59,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Phone : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      phone.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.phone??"",
                     ),
                   ],
                 ),
@@ -97,14 +72,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Age : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      age.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.age.toString(),
                     ),
                   ],
                 ),
@@ -114,14 +85,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Height (feet-inch) : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      height.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.height.toString(),
                     ),
                   ],
                 ),
@@ -131,14 +98,10 @@ class ShowInformationPage extends StatelessWidget {
                       "Gender : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      genderText,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
+                      owner.genderText!,
                     ),
                   ],
                 ),
@@ -148,21 +111,17 @@ class ShowInformationPage extends StatelessWidget {
                       "Owner Type : ",
                       style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,fontSize: 20),
+                          fontWeight: FontWeight.bold),
                     ),
                     Container(
                       height: 24,
                       width: 200,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: ownerTypeText.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Text(
-                              "${ownerTypeText[index]} ",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
+                        itemCount: owner.ownerTypeText?.length,
+                        itemBuilder: (BuildContext context, int index) => Text(
+                          "${owner.ownerTypeText![index]} "
+                        ),
                       ),
                     ),
                   ],
