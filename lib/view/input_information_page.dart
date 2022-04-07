@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:owner_information/custom_ui/custom_button.dart';
+import 'package:owner_information/custom_ui/custom_text_form_field.dart';
 import 'package:owner_information/owner.dart';
+import 'package:owner_information/utils/color_utils.dart';
+import 'package:owner_information/utils/utils.dart';
 import 'package:owner_information/view/show_infomation_page.dart';
 
 class InputInformationPage extends StatefulWidget {
@@ -62,7 +66,7 @@ class _InputInformationPageState extends State<InputInformationPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "*All Fields Are Required.",
+                          "*All fields are required.",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             color: Colors.red,
@@ -70,125 +74,64 @@ class _InputInformationPageState extends State<InputInformationPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 30.0,
+                          height: 20.0,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                            hintText: "Enter your name",
-                            labelText: "Name",
-                            prefixIcon: Icon(Icons.person),
-                          ),
+                        CustomTextFormField(
+                          label: "Name",
+                          hint: "Enter Name",
+                          borderRadius: 5,
+                          prefixIcon: Icon(Icons.person),
+                          validator: FormValidator.validateTextForm,
                           onSaved: _onNameSaved,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'This field is required';
-                            } else if (!RegExp(r'^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$')
-                                .hasMatch(value)) {
-                              return "Type a valid name";
-                            }
-                            return null;
-                          },
+                          inputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
-                          inputFormatters: [
-                            //FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(50),
-                          ],
                         ),
                         SizedBox(
-                          height: 30.0,
+                          height: 20.0,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                            hintText: "Enter Your Email Address",
-                            labelText: "Email Address",
-                            prefixIcon: Icon(Icons.email_outlined),
-                          ),
+                        CustomTextFormField(
+                          label: "Email",
+                          hint: "Enter Email",
+                          borderRadius: 5,
+                          prefixIcon: Icon(Icons.email_rounded),
+                          validator: FormValidator.validateEmailForm,
                           onSaved: _onEmailSaved,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'This field is required';
-                            } else if (!RegExp(
-                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                .hasMatch(value)) {
-                              return "Please enter a valid email address";
-                            }
-                            return null;
-                          },
+                          inputType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                         ),
                         SizedBox(
-                          height: 30.0,
+                          height: 20.0,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                            hintText: "Enter Your Phone Number",
-                            labelText: "Phone Number",
-                            prefixIcon: Icon(Icons.phone_android),
-                            prefixText: "+88 ",
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
+                        CustomTextFormField(
+                          label: "Phone",
+                          hint: "Enter Phone Number",
+                          prefixText: "+88 ",
+                          borderRadius: 5,
+                          prefixIcon: Icon(Icons.phone_android),
+                          validator: FormValidator.validatePhoneForm,
+                          onSaved: _onPhoneSaved,
+                          textInputAction: TextInputAction.next,
+                          inputType: TextInputType.phone,
+                          textinputFormatters: [
                             LengthLimitingTextInputFormatter(11),
                           ],
-                          onSaved: _onPhoneSaved,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'This field is required';
-                            } else if (!RegExp(r'^01[3-9]\d{8}$')
-                                .hasMatch(value)) {
-                              return 'Please enter valid mobile number';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
                         ),
                         SizedBox(
-                          height: 30.0,
+                          height: 20.0,
                         ),
                         Row(
                           children: [
                             Expanded(
-                              flex: 1,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                  hintText: "Age",
-                                  labelText: "Age",
-                                  prefixIcon: Icon(Icons.accessibility_new),
-                                ),
+                              child: CustomTextFormField(
+                                label: "Age",
+                                hint: "Enter Age",
+                                borderRadius: 5,
+                                prefixIcon: Icon(Icons.accessibility_new),
+                                validator: FormValidator.validateAgeForm,
                                 onSaved: _onAgeSaved,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'This field is required';
-                                  } else if (int.tryParse(value)! > 200) {
-                                    return "Age between 0 to 200 ";
-                                  }
-                                  return null;
-                                },
                                 textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
+                                inputType: TextInputType.number,
+                                textinputFormatters: [
                                   LengthLimitingTextInputFormatter(3),
                                 ],
                               ),
@@ -197,37 +140,24 @@ class _InputInformationPageState extends State<InputInformationPage> {
                               width: 20.0,
                             ),
                             Expanded(
-                              flex: 1,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                  hintText: "Feet.Inch",
-                                  labelText: "Height",
-                                  prefixIcon: Icon(Icons.height),
-                                ),
+                              child: CustomTextFormField(
+                                label: "Height",
+                                hint: "Enter Height",
+                                borderRadius: 5,
+                                prefixIcon: Icon(Icons.height),
+                                validator: FormValidator.validateHeightForm,
                                 onSaved: _onHeightSaved,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'This field is required';
-                                  } else if (double.tryParse(value)! > 8.0) {
-                                    return "Not more than 8 feet ";
-                                  }
-                                  return null;
-                                },
-                                textInputAction: TextInputAction.done,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  //FilteringTextInputFormatter.digitsOnly,
+                                textInputAction: TextInputAction.next,
+                                inputType: TextInputType.number,
+                                textinputFormatters: [
                                   LengthLimitingTextInputFormatter(3),
                                 ],
                               ),
                             ),
                           ],
                         ),
+
+                        /*
                         SizedBox(
                           height: 10.0,
                         ),
@@ -353,32 +283,33 @@ class _InputInformationPageState extends State<InputInformationPage> {
                               ],
                             ),
                           ],
-                        ),
+                        ),*/
                         SizedBox(
                           height: 10.0,
                         ),
                         Align(
                           alignment: Alignment.center,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  _owner.genderText = _selectedGender;
-                                  _owner.ownerTypeText = _selectOwnerType;
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ShowInformationPage(
-                                        owner: _owner,
-                                      ),
+                          child: CustomButton(
+                            buttonName: "Submit",
+                            onButtonPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                _owner.genderText = _selectedGender;
+                                _owner.ownerTypeText = _selectOwnerType;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ShowInformationPage(
+                                      owner: _owner,
                                     ),
-                                  );
-                                }
-                                setState(() {
-                                  _autoValidate = true;
-                                });
-                              },
-                              child: Text("Submit")),
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                _autoValidate = true;
+                              });
+                            },
+                          ),
                         ),
                       ],
                     ),
