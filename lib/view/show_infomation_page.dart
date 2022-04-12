@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:owner_information/custom_ui/custom_appbar.dart';
 import 'package:owner_information/owner.dart';
 import 'package:owner_information/view/input_information_page.dart';
 
 class ShowInformationPage extends StatelessWidget {
-   final Owner owner;
+  final Owner owner;
   const ShowInformationPage({Key? key, required this.owner}) : super(key: key);
 
   @override
@@ -11,12 +12,8 @@ class ShowInformationPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Owner's Information",
-        ),
+        title: Text('Owner Information'),
         centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
-        //automaticallyImplyLeading: false
       ),
       body: SafeArea(
         child: Container(
@@ -36,7 +33,7 @@ class ShowInformationPage extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      owner.name??"",    // (?? " ") if the data is empty
+                      owner.name ?? "", // (?? " ") if the data is empty
                     ),
                   ],
                 ),
@@ -49,7 +46,7 @@ class ShowInformationPage extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      owner.email??"",
+                      owner.email ?? "",
                     ),
                   ],
                 ),
@@ -62,7 +59,7 @@ class ShowInformationPage extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      owner.phone??"",
+                      owner.phone ?? "",
                     ),
                   ],
                 ),
@@ -119,9 +116,8 @@ class ShowInformationPage extends StatelessWidget {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: owner.ownerTypeText?.length,
-                        itemBuilder: (BuildContext context, int index) => Text(
-                          "${owner.ownerTypeText![index]} "
-                        ),
+                        itemBuilder: (BuildContext context, int index) =>
+                            Text("${owner.ownerTypeText![index]} "),
                       ),
                     ),
                   ],

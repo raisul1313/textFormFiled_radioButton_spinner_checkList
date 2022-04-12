@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:owner_information/custom_ui/custom_button.dart';
 import 'package:owner_information/custom_ui/custom_text_form_field.dart';
 import 'package:owner_information/owner.dart';
 import 'package:owner_information/utils/color_utils.dart';
+import 'package:owner_information/utils/page_utils.dart';
 import 'package:owner_information/utils/utils.dart';
 import 'package:owner_information/view/show_infomation_page.dart';
+
+import '../custom_ui/custom_header.dart';
 
 class InputInformationPage extends StatefulWidget {
   const InputInformationPage({Key? key}) : super(key: key);
@@ -15,13 +19,20 @@ class InputInformationPage extends StatefulWidget {
 }
 
 class _InputInformationPageState extends State<InputInformationPage> {
+  late double _pageHeight;
+  late double _pageWidth;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _checkboxFormGlobalKey = GlobalKey<FormState>();
   late Owner _owner;
-  int _radioGroupValue = 1;
-  String _selectedGender = " ";
   late List<String> _selectOwnerType;
   late bool _bikeVal, _carVal, _truckVal, _houseVal;
   bool _autoValidate = false;
+  int _radioValue = 0;
+  String _genderType = 'male';
+  bool _isBikeChecked = false;
+  bool _isCarChecked = false;
+  bool _isTruckrChecked = false;
+  bool _isHouseChecked = false;
 
   @override
   void initState() {
@@ -31,13 +42,13 @@ class _InputInformationPageState extends State<InputInformationPage> {
     _houseVal = false;
     _selectOwnerType = [];
     _owner = Owner();
-    //_selectedGender = "baal";
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    _pageHeight = MediaQuery.of(context).size.height;
+    _pageWidth = PageUtils.getPageWidth(context);
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -48,8 +59,8 @@ class _InputInformationPageState extends State<InputInformationPage> {
           automaticallyImplyLeading: false),
       body: SafeArea(
         child: Container(
-          height: size.height,
-          width: size.width,
+          height: _pageHeight,
+          width: _pageWidth,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -156,12 +167,11 @@ class _InputInformationPageState extends State<InputInformationPage> {
                             ),
                           ],
                         ),
-
-                        /*
                         SizedBox(
-                          height: 10.0,
+                          height: 20.0,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               "Gender: ",
@@ -170,35 +180,15 @@ class _InputInformationPageState extends State<InputInformationPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Row(
-                              children: [
-                                Radio(
-                                    value: 1,
-                                    groupValue: _radioGroupValue,
-                                    onChanged: _handleRadioValue),
-                                Text("Male"),
-                              ],
+                            SizedBox(
+                              width: _pageWidth * .02,
                             ),
-                            Row(
-                              children: [
-                                Radio(
-                                    value: 2,
-                                    groupValue: _radioGroupValue,
-                                    onChanged: _handleRadioValue),
-                                Text("Female"),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Radio(
-                                    value: 3,
-                                    groupValue: _radioGroupValue,
-                                    onChanged: _handleRadioValue),
-                                Text("Other"),
-                              ],
-                            ),
+                            _radioButtons(),
                           ],
                         ),
+                        _getCheckboxWidget(),
+
+                        /*
                         SizedBox(
                           height: 10.0,
                         ),
@@ -284,6 +274,7 @@ class _InputInformationPageState extends State<InputInformationPage> {
                             ),
                           ],
                         ),*/
+
                         SizedBox(
                           height: 10.0,
                         ),
@@ -294,7 +285,7 @@ class _InputInformationPageState extends State<InputInformationPage> {
                             onButtonPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                _owner.genderText = _selectedGender;
+                                _owner.genderText = _genderType;
                                 _owner.ownerTypeText = _selectOwnerType;
                                 Navigator.push(
                                   context,
@@ -333,30 +324,171 @@ class _InputInformationPageState extends State<InputInformationPage> {
 
   _onHeightSaved(height) => _owner.height = height;
 
-  _handleRadioValue(value) {
-    switch (value) {
-      case 1:
-        setState(() {
-          _radioGroupValue = value;
-          _selectedGender = "Male";
-        });
+  _radioButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Radio(
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity,
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          value: 0,
+          groupValue: _radioValue,
+          onChanged: _handleRadioValueChange,
+        ),
+        Text(
+          'Male',
+          style: new TextStyle(color: Colors.black),
+        ),
+        SizedBox(
+          width: _pageWidth * .02,
+        ),
+        Radio(
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity,
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          value: 1,
+          groupValue: _radioValue,
+          onChanged: _handleRadioValueChange,
+        ),
+        Text(
+          'Female',
+          style: new TextStyle(color: Colors.black),
+        ),
+        SizedBox(
+          width: _pageWidth * .02,
+        ),
+        Radio(
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity,
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          value: 2,
+          groupValue: _radioValue,
+          onChanged: _handleRadioValueChange,
+        ),
+        Text(
+          'Other',
+          style: new TextStyle(color: Colors.black
+              //fontSize: 16.0,
+              ),
+        )
+      ],
+    );
+  }
 
-        break;
-      case 2:
-        setState(() {
-          _radioGroupValue = value;
-          _selectedGender = "Female";
-        });
-        break;
-      case 3:
-        setState(() {
-          _radioGroupValue = value;
-          _selectedGender = "Other";
-        });
-        break;
-      default:
-        _selectedGender = "Male";
-        break;
-    }
+  _handleRadioValueChange(int? value) {
+    setState(() {
+      _radioValue = value!;
+      switch (_radioValue) {
+        case 0:
+          setState(() {
+            _genderType = 'Male';
+          });
+          break;
+        case 1:
+          setState(() {
+            _genderType = 'Female';
+          });
+          break;
+        case 2:
+          setState(() {
+            _genderType = 'Other';
+          });
+          break;
+      }
+    });
+  }
+
+  Widget _getCheckboxWidget() {
+    return Form(
+      key: _checkboxFormGlobalKey,
+      autovalidateMode:
+          _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+      child: FormField<bool>(
+        builder: (state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomHeader(
+                headerName: 'Owner Type',
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20.0,
+                        child: Checkbox(
+                          value: _isBikeChecked,
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                          onChanged: (value) {
+                            _isBikeChecked = !_isBikeChecked;
+                            //state.didChange(value);
+                            _selectOwnerType.add('Bike');
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      Text(
+                        'Bike',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20.0,
+                        child: Checkbox(
+                          value: _isCarChecked,
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                          onChanged: (value) {
+                            _isCarChecked = !_isCarChecked;
+                            //state.didChange(value);
+                            _selectOwnerType.add('Car');
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      Text(
+                        'Car',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              state.errorText == null
+                  ? Text("")
+                  : Text('select one role',
+                      style: TextStyle(color: Colors.red)),
+            ],
+          );
+        },
+//output from validation will be displayed in state.errorText (above)
+        validator: (value) {
+          if (value != true) {
+            return 'You have to select at least one role';
+          } else {
+            return null;
+          }
+        },
+      ),
+    );
   }
 }
