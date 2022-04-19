@@ -4,7 +4,12 @@ class Owner {
   String? age;
   String? height;
 
-  Owner({this.name, this.email, this.genderText, this.phone, this.ownerTypeText,
-    this.age, this.height});
+  Owner(
+      {this.name,
+      this.email,
+      this.genderText,
+      this.phone,
+      this.ownerTypeText,
+      this.age,
+      this.height});
 }
-
