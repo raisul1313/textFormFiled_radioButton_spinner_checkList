@@ -21,26 +21,25 @@ class FormValidator {
 
   static String? validatePhoneForm(String text) {
     if (text == null || text.isEmpty) {
-      return 'This field is required';
-    }
-    else if (!RegExp(r'^01[3-9]\d{8}$').hasMatch(text)) {
+      return '*This field is required';
+    } else if (!RegExp(r'^01[3-9]\d{8}$').hasMatch(text)) {
       return 'Please enter valid mobile number';
     }
     return null;
   }
 
-  static String? validateAgeForm(String text){
+  static String? validateAgeForm(String text) {
     if (text == null || text.isEmpty) {
-      return 'This field is required';
+      return '*This field is required';
     } else if (int.tryParse(text)! > 200) {
       return "Age between 0 to 200 ";
     }
     return null;
   }
 
-  static String? validateHeightForm(String text){
+  static String? validateHeightForm(String text) {
     if (text == null || text.isEmpty) {
-      return 'This field is required';
+      return '*This field is required';
     } else if (double.tryParse(text)! > 8.0) {
       return "Not more than 8 feet ";
     }

@@ -2,14 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:owner_information/custom_ui/custom_button.dart';
+import 'package:owner_information/custom_ui/custom_header.dart';
 import 'package:owner_information/custom_ui/custom_text_form_field.dart';
 import 'package:owner_information/owner.dart';
-import 'package:owner_information/utils/color_utils.dart';
 import 'package:owner_information/utils/page_utils.dart';
-import 'package:owner_information/utils/utils.dart';
+import 'package:owner_information/utils/validations_utils.dart';
 import 'package:owner_information/view/show_infomation_page.dart';
-
-import '../custom_ui/custom_header.dart';
 
 class InputInformationPage extends StatefulWidget {
   const InputInformationPage({Key? key}) : super(key: key);
@@ -21,26 +19,21 @@ class InputInformationPage extends StatefulWidget {
 class _InputInformationPageState extends State<InputInformationPage> {
   late double _pageHeight;
   late double _pageWidth;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _checkboxFormGlobalKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final _checkboxFormGlobalKey = GlobalKey<FormState>();
   late Owner _owner;
-  late List<String> _selectOwnerType;
-  late bool _bikeVal, _carVal, _truckVal, _houseVal;
+  late List<String> _ownerType;
   bool _autoValidate = false;
   int _radioValue = 0;
-  String _genderType = 'male';
+  String _genderType = 'Male';
   bool _isBikeChecked = false;
   bool _isCarChecked = false;
-  bool _isTruckrChecked = false;
+  bool _isTruckChecked = false;
   bool _isHouseChecked = false;
 
   @override
   void initState() {
-    _bikeVal = false;
-    _carVal = false;
-    _truckVal = false;
-    _houseVal = false;
-    _selectOwnerType = [];
+    _ownerType = [];
     _owner = Owner();
     super.initState();
   }
@@ -131,6 +124,7 @@ class _InputInformationPageState extends State<InputInformationPage> {
                           height: 20.0,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               child: CustomTextFormField(
@@ -186,95 +180,10 @@ class _InputInformationPageState extends State<InputInformationPage> {
                             _radioButtons(),
                           ],
                         ),
-                        _getCheckboxWidget(),
-
-                        /*
                         SizedBox(
                           height: 10.0,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Owner Type: ",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                      value: _bikeVal,
-                                      onChanged: (bool? newValue) {
-                                        setState(() {
-                                          if (_bikeVal = newValue!) {
-                                            _selectOwnerType.add("Bike");
-                                          } else {
-                                            _selectOwnerType.remove("Bike");
-                                          }
-                                        });
-                                      },
-                                    ),
-                                    Text("Bike"),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        value: _carVal,
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            if (_carVal = newValue!) {
-                                              _selectOwnerType.add("Car");
-                                            } else {
-                                              _selectOwnerType.remove("Car");
-                                            }
-                                          });
-                                        }),
-                                    Text("Car"),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        value: _truckVal,
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            if (_truckVal = newValue!) {
-                                              _selectOwnerType.add("Truck");
-                                            } else {
-                                              _selectOwnerType.remove("Truck");
-                                            }
-                                          });
-                                        }),
-                                    Text("Truck"),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        value: _houseVal,
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            if (_houseVal = newValue!) {
-                                              _selectOwnerType.add("House");
-                                            } else {
-                                              _selectOwnerType.remove("House");
-                                            }
-                                          });
-                                        }),
-                                    Text("House"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),*/
-
+                        _getCheckboxWidget(),
                         SizedBox(
                           height: 10.0,
                         ),
@@ -283,10 +192,13 @@ class _InputInformationPageState extends State<InputInformationPage> {
                           child: CustomButton(
                             buttonName: "Submit",
                             onButtonPressed: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate() &&
+                                  _checkboxFormGlobalKey.currentState!
+                                      .validate()) {
                                 _formKey.currentState!.save();
+                                _checkboxFormGlobalKey.currentState!.save();
                                 _owner.genderText = _genderType;
-                                _owner.ownerTypeText = _selectOwnerType;
+                                _owner.ownerTypeText = _ownerType;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -411,14 +323,35 @@ class _InputInformationPageState extends State<InputInformationPage> {
       autovalidateMode:
           _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: FormField<bool>(
+        //output from validation will be displayed in state.errorText (down)
+        validator: (value) {
+          if (value != true) {
+            return "";
+          } else {
+            return null;
+          }
+        },
         builder: (state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomHeader(
-                headerName: 'Owner Type',
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  CustomHeader(
+                    headerName: 'Owner Type. ',
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(width: 5.0),
+                  Text(state.errorText ?? ""),
+                  state.errorText == null
+                      ? Text("")
+                      : Text(
+                          '*Select One',
+                          style: TextStyle(
+                              color: Colors.red.shade700, fontSize: 11.5),
+                        ),
+                ],
               ),
               Column(
                 children: [
@@ -432,9 +365,18 @@ class _InputInformationPageState extends State<InputInformationPage> {
                           side: BorderSide(
                               color: Theme.of(context).primaryColor, width: 2),
                           onChanged: (value) {
-                            _isBikeChecked = !_isBikeChecked;
-                            //state.didChange(value);
-                            _selectOwnerType.add('Bike');
+                            _isBikeChecked = value!;
+                            if (value) {
+                              _ownerType.add('Bike');
+                              state.didChange(value);
+                            } else {
+                              _ownerType.remove('Bike');
+                            }
+
+                            if (_ownerType.isEmpty) {
+                              state.didChange(false);
+                            }
+
                             setState(() {});
                           },
                         ),
@@ -452,15 +394,24 @@ class _InputInformationPageState extends State<InputInformationPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 20.0,
+                        height: 30.0,
                         child: Checkbox(
                           value: _isCarChecked,
                           side: BorderSide(
                               color: Theme.of(context).primaryColor, width: 2),
                           onChanged: (value) {
-                            _isCarChecked = !_isCarChecked;
-                            //state.didChange(value);
-                            _selectOwnerType.add('Car');
+                            _isCarChecked = value!;
+                            if (value) {
+                              _ownerType.add('Car');
+                              state.didChange(value);
+                            } else {
+                              _ownerType.remove('Car');
+                            }
+
+                            if (_ownerType.isEmpty) {
+                              state.didChange(false);
+                            }
+
                             setState(() {});
                           },
                         ),
@@ -471,22 +422,76 @@ class _InputInformationPageState extends State<InputInformationPage> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 25.0,
+                        child: Checkbox(
+                          value: _isTruckChecked,
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                          onChanged: (value) {
+                            _isTruckChecked = value!;
+                            if (value) {
+                              _ownerType.add('Truck');
+                              state.didChange(value);
+                            } else {
+                              _ownerType.remove('Truck');
+                            }
+                            if (_ownerType.isEmpty) {
+                              state.didChange(false);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      Text(
+                        'Truck',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 25.0,
+                        child: Checkbox(
+                          value: _isHouseChecked,
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2),
+                          onChanged: (value) {
+                            _isHouseChecked = value!;
+                            if (value) {
+                              _ownerType.add('House');
+                              state.didChange(value);
+                            } else {
+                              _ownerType.remove('House');
+                            }
+                            if (_ownerType.isEmpty) {
+                              state.didChange(false);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      Text(
+                        'House',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              state.errorText == null
-                  ? Text("")
-                  : Text('select one role',
-                      style: TextStyle(color: Colors.red)),
             ],
           );
-        },
-//output from validation will be displayed in state.errorText (above)
-        validator: (value) {
-          if (value != true) {
-            return 'You have to select at least one role';
-          } else {
-            return null;
-          }
         },
       ),
     );

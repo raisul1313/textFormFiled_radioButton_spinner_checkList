@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:owner_information/custom_ui/custom_appbar.dart';
 import 'package:owner_information/owner.dart';
 import 'package:owner_information/view/input_information_page.dart';
 
@@ -111,7 +110,7 @@ class ShowInformationPage extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Container(
-                      height: 24,
+                      height: 15,
                       width: 200,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
